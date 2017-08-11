@@ -8,40 +8,89 @@
  */
 
 import React from 'react';
-import PropTypes from 'prop-types';
 import withStyles from 'isomorphic-style-loader/lib/withStyles';
 import s from './Home.css';
 
 class Home extends React.Component {
-  static propTypes = {
-    news: PropTypes.arrayOf(
-      PropTypes.shape({
-        title: PropTypes.string.isRequired,
-        link: PropTypes.string.isRequired,
-        content: PropTypes.string,
-      }),
-    ).isRequired,
+  constructor(props) {
+    super(props);
+    this.currentPlayerId = 1;
+    this.state = {
+      players: [],
+    };
+  }
+  createPlayer = ({ currentPlayerId } = this) => {
+    const player = {
+      id: currentPlayerId,
+      name: `player${currentPlayerId}`,
+      speed: 1,
+      strength: 2,
+      agility: currentPlayerId,
+    };
+    this.currentPlayerId++;
+    return player;
   };
+  generateTeam = () => {
+    const players = [];
+    for (let i = 0; i < 15; i++) {
+      players.push(this.createPlayer());
+    }
+    players.reverse();
+    this.setState({
+      players,
+    });
+  };
+  getTotalAttributeScore = players => {
+    let attributeScore = 0;
+    players.forEach(player => {
+      attributeScore += this.getAttributeScore(player);
+    });
+    return attributeScore;
+  }
+  getAttributeScore = ({speed, strength, agility}) => {
+    return speed + strength + agility;
+  }
 
-  render() {
+  render({ state: { players } } = this) {
     return (
       <div className={s.root}>
         <div className={s.container}>
-          <h1>React.js News</h1>
-          {this.props.news.map(item =>
-            <article key={item.link} className={s.newsItem}>
-              <h1 className={s.newsTitle}>
-                <a href={item.link}>
-                  {item.title}
-                </a>
-              </h1>
-              <div
-                className={s.newsDesc}
-                // eslint-disable-next-line react/no-danger
-                dangerouslySetInnerHTML={{ __html: item.content }}
-              />
-            </article>,
-          )}
+          {players.length === 0 &&
+            <button className={s.generate} onClick={this.generateTeam}>
+              Generate team
+            </button>}
+          <div className={s.players}>
+            {players.map((player, i) =>
+              <div className={s.player}>
+                <p>
+                  <span className={s.playerLabel}>Name</span> {player.name}
+                </p>
+                <p>
+                  <span className={s.playerLabel}>Speed: </span> {player.speed}
+                </p>
+                <p>
+                  <span className={s.playerLabel}>Strength: </span>{' '}
+                  {player.strength}
+                </p>
+                <p>
+                  <span className={s.playerLabel}>Agility: </span>{' '}
+                  {player.agility}
+                </p>
+                <p>
+                  <span className={s.playerLabel}>Score: </span>{' '}
+                  {this.getAttributeScore(player)}
+                </p>
+                <p>
+                  <span className={s.playerLabel}>Starter: </span>{' '}
+                  {i < 10 ? 'Yes' : 'No'}
+                </p>
+              </div>,
+            )}
+          </div>
+          {players &&
+            <p>
+              Total attribute score: {this.getTotalAttributeScore(players)}
+            </p>}
         </div>
       </div>
     );

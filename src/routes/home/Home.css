@@ -47,3 +47,23 @@
     max-width: 100%;
   }
 }
+
+.player {
+  display: inline-block;
+  border: 1px solid rgba(128, 128, 128, 0.18);
+  margin: 0 20px 20px 0;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.players {
+  margin-top: 20px;
+}
+
+.generate{
+  margin: 20px 20px 20px 0;
+}
+
+.playerLabel{
+  font-weight: bold;
+}
