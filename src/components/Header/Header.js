@@ -22,6 +22,7 @@ class Header extends React.Component {
         <div className={s.container}>
           <div className={s.banner}>
             <h1 className={s.bannerTitle}>Roster Bots</h1>
+            <iframe src="https://ghbtns.com/github-btn.html?user=toosick&repo=roster-bots&type=star&count=true&size=large" frameborder="0" scrolling="0" width="160px" height="30px" style={{border: 0}}></iframe>
           </div>
         </div>
       </div>
